@@ -3,19 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/colorBlack"
+    android:background="@drawable/children"
     android:padding="0dp" >
-
-    <WebView
-        android:id="@+id/webview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="@dimen/webview_margin"
-        android:layout_marginTop="@dimen/webview_margin"
-        android:layout_marginEnd="@dimen/webview_margin"
-        android:layout_marginBottom="@dimen/webview_margin">
-
-    </WebView>
 </RelativeLayout>

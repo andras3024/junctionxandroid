@@ -22,8 +22,12 @@
         <activity
             android:name=".BarcodeCaptureActivity"
             android:label="@string/title_activity_barcode_capture"
-            android:screenOrientation="landscape"
+            android:screenOrientation="portrait"
             android:theme="@style/NoActionBar" />
+
+        <activity
+            android:name=".WebViewActivity"
+            android:screenOrientation="landscape" />
 
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"

@@ -12,6 +12,7 @@
     <string name="qrcode_done">QR code read.</string>
     <string name="auto_focus">Auto Focus</string>
     <string name="use_flash">Use Flash</string>
+    <string name="welcome">Welcome to your emotional aider app!</string>
 
 
 </resources>

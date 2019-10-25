@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
-  <com.modimguidedandroidphone.CameraSourcePreview
+  <andras.ludvig.junctionx2019.CameraSourcePreview
       android:id="@+id/cameraSourcePreview"
       android:layout_width="400dp"
       android:layout_height="match_parent"

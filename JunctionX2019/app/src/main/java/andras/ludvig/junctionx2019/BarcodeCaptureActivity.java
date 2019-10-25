@@ -122,7 +122,7 @@ public class BarcodeCaptureActivity extends Activity {
 
     /** Called when valid QR code is read*/
     public void sendQRMessage(String message) {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, WebViewActivity.class);
         intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
     }
