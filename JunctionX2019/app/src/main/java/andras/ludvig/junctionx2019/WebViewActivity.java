@@ -112,7 +112,7 @@ public class WebViewActivity extends Activity {
         webSettings.setAppCacheEnabled(false);
         webSettings.setAllowFileAccess(true);
         myWebView.setWebViewClient(new MyWebViewClient());
-        myWebView.clearCache(true);
+        //myWebView.clearCache(true);
     }
 
     // Redirect new url requests to WebViewClient

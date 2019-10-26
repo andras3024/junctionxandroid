@@ -20,6 +20,7 @@ public class MainActivity extends Activity {
     public static final String EXTRA_MESSAGE = "Server address";
     private String JWTaccesstoken,url;
     private String tag = "Junction";
+    private Boolean waitforperm = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +31,7 @@ public class MainActivity extends Activity {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
             // Permission is not granted
+            waitforperm = true;
             ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, 1);
         }
 
@@ -41,6 +43,19 @@ public class MainActivity extends Activity {
         Log.v(tag,"JWT: " + JWTaccesstoken);
         Log.v(tag,"Url: " + url);
 
+        if(!waitforperm){
+            StartActivities();
+        }
+
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults){
+        StartActivities();
+    }
+
+    public void StartActivities(){
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -52,7 +67,7 @@ public class MainActivity extends Activity {
                     startWebViewActivity(url + "," + JWTaccesstoken);
                 }
             }
-        }, 5000);
+        }, 500);
     }
 
     public void startQRcodeActivity(){
