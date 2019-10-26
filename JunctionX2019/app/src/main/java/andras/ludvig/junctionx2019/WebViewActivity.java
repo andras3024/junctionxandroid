@@ -48,7 +48,7 @@ public class WebViewActivity extends Activity {
     static final int REQUEST_TAKE_PHOTO  = 1;
     String currentPhotoPath;
     private String JWTaccesstoken,authcred;
-    private String POSTUrl;
+    private String POSTUrl,firsturl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +85,7 @@ public class WebViewActivity extends Activity {
 
         setWebview();
 
-        String url = QR_msg_list.get(0);
+        firsturl = QR_msg_list.get(0);
 
         Context context = this;
         SharedPreferences sharedPref = context.getSharedPreferences(
@@ -98,7 +98,7 @@ public class WebViewActivity extends Activity {
         // Method to add headers with request
         Map<String, String> headers = new HashMap<String, String>();
         headers.put("Authorization", authcred);
-        myWebView.loadUrl(url,headers);
+        myWebView.loadUrl(firsturl,headers);
     }
 
 
@@ -109,8 +109,10 @@ public class WebViewActivity extends Activity {
         webSettings.setLoadWithOverviewMode(true);
         webSettings.setUseWideViewPort(true);
         webSettings.setJavaScriptEnabled(true);
+        webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
         webSettings.setAppCacheEnabled(false);
         webSettings.setAllowFileAccess(true);
+        webSettings.setMediaPlaybackRequiresUserGesture(false);
         myWebView.setWebViewClient(new MyWebViewClient());
         //myWebView.clearCache(true);
     }
@@ -226,6 +228,9 @@ public class WebViewActivity extends Activity {
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.isTracking()
                 && !event.isCanceled()) {
+            Map<String, String> headers = new HashMap<String, String>();
+            headers.put("Authorization", authcred);
+            myWebView.loadUrl(firsturl,headers);
             return true;
         }
         return super.onKeyUp(keyCode, event);
