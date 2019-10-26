@@ -3,7 +3,9 @@ package andras.ludvig.junctionx2019;
 import android.Manifest;
 import android.app.Activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -72,6 +74,7 @@ public class WebViewActivity extends Activity {
         }
         Log.d("QR",message);
         List<String> QR_msg_list = Arrays.asList(message.split(","));
+
         if(1 >= QR_msg_list.size()){
             JWTaccesstoken = "No access token given!";
         }else{
@@ -83,6 +86,15 @@ public class WebViewActivity extends Activity {
         setWebview();
 
         String url = QR_msg_list.get(0);
+
+        Context context = this;
+        SharedPreferences sharedPref = context.getSharedPreferences(
+                "authentication", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("JWTaccesstoken", QR_msg_list.get(1));
+        editor.putString("url", QR_msg_list.get(0));
+        editor.apply();
+
         // Method to add headers with request
         Map<String, String> headers = new HashMap<String, String>();
         headers.put("Authorization", authcred);

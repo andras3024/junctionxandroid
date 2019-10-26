@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.KeyEvent;
 
 import androidx.core.app.ActivityCompat;
@@ -18,11 +19,13 @@ public class MainActivity extends Activity {
     // Class variables and constants
     public static final String EXTRA_MESSAGE = "Server address";
     private String JWTaccesstoken,url;
+    private String tag = "Junction";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.v(tag,"App started");
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -30,9 +33,13 @@ public class MainActivity extends Activity {
             ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, 1);
         }
 
-        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        Context context = this;
+        SharedPreferences sharedPref = context.getSharedPreferences(
+                "authentication", Context.MODE_PRIVATE);
         JWTaccesstoken = sharedPref.getString("JWTaccesstoken", "");
         url = sharedPref.getString("url", "");
+        Log.v(tag,"JWT: " + JWTaccesstoken);
+        Log.v(tag,"Url: " + url);
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -42,7 +49,7 @@ public class MainActivity extends Activity {
                     startQRcodeActivity();
                 }
                 else{
-                    startWebViewActivity();
+                    startWebViewActivity(url + "," + JWTaccesstoken);
                 }
             }
         }, 5000);
@@ -53,8 +60,9 @@ public class MainActivity extends Activity {
         startActivity(intent);
     }
 
-    public void startWebViewActivity(){
+    public void startWebViewActivity(String message){
         Intent intent = new Intent(this, WebViewActivity.class);
+        intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
     }
 
