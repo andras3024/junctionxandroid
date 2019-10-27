@@ -67,7 +67,7 @@ public class MainActivity extends Activity {
                     startWebViewActivity(url + "," + JWTaccesstoken);
                 }
             }
-        }, 500);
+        }, 2000);
     }
 
     public void startQRcodeActivity(){

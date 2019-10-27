@@ -12,7 +12,10 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
+import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -114,7 +117,18 @@ public class WebViewActivity extends Activity {
         webSettings.setAllowFileAccess(true);
         webSettings.setMediaPlaybackRequiresUserGesture(false);
         myWebView.setWebViewClient(new MyWebViewClient());
-        //myWebView.clearCache(true);
+        myWebView.clearCache(true);
+
+        // Setup WebView to detect swipes.
+        final GestureDetector gestureDetector = new GestureDetector(this, new SwipeGestureDetector());
+        View.OnTouchListener gestureListener = new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return gestureDetector.onTouchEvent(event);
+            }
+        };
+        myWebView.setOnTouchListener(gestureListener);
+
     }
 
     // Redirect new url requests to WebViewClient
@@ -122,6 +136,10 @@ public class WebViewActivity extends Activity {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             Log.v("URL","Redirecting to" + url);
+            if(checkUploadURL(url, ".+upload")){
+                dispatchTakePictureIntent();
+                POSTUrl = url;
+            }
             Map<String, String> headers = new HashMap<String, String>();
             headers.put("Authorization", authcred);
             view.loadUrl(url,headers);
@@ -134,6 +152,31 @@ public class WebViewActivity extends Activity {
     private boolean checkUploadURL(String url, String match){
         boolean b = Pattern.matches(match, url);
         return b;
+    }
+
+    // Detects swipe gestures on webview
+    class SwipeGestureDetector extends GestureDetector.SimpleOnGestureListener {
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            if(e1 == null || e2 == null) return false;
+            if(e1.getPointerCount() > 1 || e2.getPointerCount() > 1) return false;
+            else {
+                try { // right to left swipe .. go to next page
+                    if(e1.getX() - e2.getX() > 50 && Math.abs(velocityX) > 200) {
+                        myWebView.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_RIGHT));
+                        return true;
+                    } //left to right swipe .. go to prev page
+                    else if (e2.getX() - e1.getX() > 50 && Math.abs(velocityX) > 200) {
+                        myWebView.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_LEFT));
+                        return true;
+                    }
+                } catch (Exception e) {
+                    // nothing
+                }
+                return false;
+            }
+        }
+
     }
 
     // Start a photo capture with built in camera app
