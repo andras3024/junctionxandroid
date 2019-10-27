@@ -199,6 +199,7 @@ public class WebViewActivity extends Activity {
                         "com.example.android.fileprovider",
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                takePictureIntent.putExtra("android.intent.extras.CAMERA_FACING", 1);
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
             }
         }
@@ -271,9 +272,16 @@ public class WebViewActivity extends Activity {
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.isTracking()
                 && !event.isCanceled()) {
-            Map<String, String> headers = new HashMap<String, String>();
-            headers.put("Authorization", authcred);
-            myWebView.loadUrl(firsturl,headers);
+            if(myWebView.getUrl().equals(firsturl))
+            {
+                Intent intent = new Intent(this, BarcodeCaptureActivity.class);
+                startActivity(intent);
+            }
+            else {
+                Map<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization", authcred);
+                myWebView.loadUrl(firsturl, headers);
+            }
             return true;
         }
         return super.onKeyUp(keyCode, event);

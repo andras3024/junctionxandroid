@@ -95,7 +95,7 @@ public class BarcodeCaptureActivity extends Activity {
 
     private void setupCameraSource() {
         cameraSource = new CameraSource.Builder(this, barcodeDetector)
-                .setFacing(CameraSource.CAMERA_FACING_FRONT)
+                .setFacing(CameraSource.CAMERA_FACING_BACK)
                 .setRequestedFps(15.0f)
                 .setRequestedPreviewSize(640, 640)
                 .build();
